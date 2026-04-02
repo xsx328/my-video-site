@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>光影集 · 作品分类展映</title>
+    <meta name="description" content="个人视频作品集 | 游戏·科技·宣传·短视频 创意展映">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+            background: #fafbfc;
+            color: #1e2a3e;
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+
+        /* 头部 */
+        .hero {
+            text-align: center;
+            padding: 3rem 0 1.8rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            margin-bottom: 1.5rem;
+        }
+        .hero h1 {
+            font-size: 2.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #1e2a3e 0%, #3b4d6b 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+        }
+        .hero .sub {
+            font-size: 1.1rem;
+            color: #5b6e8c;
+            font-weight: 400;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* 分组标题 */
+        .section-title {
+            font-size: 1.7rem;
+            font-weight: 600;
+            margin: 2.5rem 0 1.2rem 0;
+            padding-left: 0.5rem;
+            border-left: 5px solid #00a1d6;
+            letter-spacing: -0.3px;
+            color: #1e2a3e;
+        }
+        .section-title:first-of-type {
+            margin-top: 0.5rem;
+        }
+        .section-title i {
+            color: #00a1d6;
+            margin-right: 10px;
+            font-size: 1.4rem;
+        }
+
+        /* 视频网格 */
+        .video-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        /* 卡片样式 */
+        .video-card {
+            background: #ffffff;
+            border-radius: 28px;
+            overflow: hidden;
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.04), 0 0 0 1px rgba(0, 0, 0, 0.02);
+            transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+            cursor: pointer;
+        }
+        .video-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 24px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(0, 0, 0, 0.03);
+        }
+
+        .card-cover {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%;
+            background: #eef2f6;
+            overflow: hidden;
+        }
+        .card-cover img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s ease;
+        }
+        .video-card:hover .card-cover img {
+            transform: scale(1.03);
+        }
+        .play-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+            backdrop-filter: blur(2px);
+        }
+        .video-card:hover .play-overlay {
+            opacity: 1;
+        }
+        .play-icon-bg {
+            background: rgba(255, 255, 255, 0.95);
+            width: 52px;
+            height: 52px;
+            border-radius: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+        .play-icon-bg i {
+            color: #00a1d6;
+            font-size: 24px;
+            margin-left: 3px;
+        }
+
+        .card-info {
+            padding: 1rem 1.2rem 1.3rem;
+        }
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #0f1c2e;
+            margin-bottom: 0.4rem;
+            line-height: 1.4;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+        .card-desc {
+            font-size: 0.85rem;
+            color: #5b6e8c;
+            line-height: 1.45;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 底部联系方式 (纯文本) */
+        .footer {
+            margin-top: 3rem;
+            padding: 2rem 0 2.2rem;
+            border-top: 1px solid rgba(0, 0, 0, 0.06);
+            text-align: center;
+        }
+        .contact-static {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .contact-item-static {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.95rem;
+            color: #2c3e50;
+            background: #f0f2f5;
+            padding: 0.45rem 1.2rem;
+            border-radius: 60px;
+            font-weight: 500;
+            pointer-events: none;  /* 确保无跳转交互 */
+            user-select: text;
+        }
+        .contact-item-static i {
+            font-size: 1.1rem;
+            color: #00a1d6;
+        }
+        .copyright {
+            font-size: 0.8rem;
+            color: #8b9ab0;
+            margin-top: 1rem;
+        }
+
+        /* 模态框播放器 (标题移至外部下方) */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.25s ease;
+        }
+        .modal.show {
+            display: flex;
+            opacity: 1;
+        }
+        .modal-content {
+            background: #0f0f0f;
+            width: 90%;
+            max-width: 1100px;
+            border-radius: 24px;
+            overflow: hidden;
+            position: relative;
+            box-shadow: 0 30px 40px rgba(0, 0, 0, 0.4);
+            animation: modalFadeIn 0.3s ease;
+        }
+        @keyframes modalFadeIn {
+            from { opacity: 0; transform: scale(0.96);}
+            to { opacity: 1; transform: scale(1);}
+        }
+        .modal-video-wrapper {
+            position: relative;
+            background: #000;
+            width: 100%;
+            aspect-ratio: 16 / 9;
+        }
+        .modal-video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border: none;
+        }
+        /* 标题栏独立在视频下方，不遮挡控件 */
+        .modal-footer-bar {
+            background: rgba(20, 20, 28, 0.92);
+            backdrop-filter: blur(12px);
+            padding: 0.9rem 1.5rem;
+            color: #f0f2f5;
+            font-weight: 500;
+            font-size: 1rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .modal-footer-bar i {
+            margin-right: 10px;
+            color: #00a1d6;
+        }
+        .modal-close {
+            position: absolute;
+            top: -48px;
+            right: 0;
+            background: rgba(30, 30, 40, 0.9);
+            backdrop-filter: blur(6px);
+            border: none;
+            color: white;
+            font-size: 24px;
+            width: 42px;
+            height: 42px;
+            border-radius: 42px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: 0.2s;
+            z-index: 10;
+        }
+        .modal-close:hover {
+            background: #ff4757;
+            transform: scale(1.02);
+        }
+
+        @media (max-width: 720px) {
+            .container { padding: 0 18px; }
+            .hero h1 { font-size: 2rem; }
+            .video-grid { gap: 1.2rem; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); }
+            .contact-static { gap: 1rem; }
+            .contact-item-static { padding: 0.35rem 1rem; font-size: 0.85rem; }
+            .modal-close { top: -40px; right: 4px; width: 36px; height: 36px; font-size: 20px; }
+            .section-title { font-size: 1.4rem; margin: 1.8rem 0 1rem; }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem 1rem;
+            background: #f8f9fc;
+            border-radius: 2rem;
+            color: #7e8c9e;
+        }
+        .loading-placeholder {
+            text-align: center;
+            padding: 2rem;
+            color: #8ba0bc;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="hero">
+        <h1 id="siteTitle">🎬 创作原色</h1>
+        <div class="sub" id="siteSubtitle">游戏 · 科技 · 宣传 · 短视频 · 灵感映像</div>
+    </div>
+
+    <!-- 分组视频容器 -->
+    <div id="groupedVideoContainer">
+        <div class="loading-placeholder"><i class="fas fa-spinner fa-pulse"></i> 加载作品集...</div>
+    </div>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <div class="contact-static" id="staticContacts">
+            <!-- 纯文本联系方式 -->
+        </div>
+        <div class="copyright" id="copyrightText">© 2025 个人作品集 | 保持热爱 奔赴山海</div>
+    </div>
+</footer>
+
+<!-- 模态框播放器 -->
+<div id="videoModal" class="modal">
+    <div class="modal-content">
+        <button class="modal-close" id="closeModalBtn"><i class="fas fa-times"></i></button>
+        <div class="modal-video-wrapper">
+            <iframe id="modalIframe" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen" allowfullscreen></iframe>
+        </div>
+        <div class="modal-footer-bar" id="modalVideoTitleBar">
+            <i class="fas fa-play-circle"></i> <span id="modalVideoTitle">视频作品</span>
+        </div>
+    </div>
+</div>
+
+<script src="config.js"></script>
+<script>
+    (function() {
+        // ---------- 默认配置 ----------
+        const defaultConfig = {
+            site: {
+                title: "🎬 创作原色",
+                subtitle: "游戏 · 科技 · 宣传 · 短视频 · 灵感映像",
+                copyright: "© 2025 个人作品集 | 创意无限"
+            },
+            videos: [
+                { 
+                    title: "虚幻引擎5 游戏混剪", 
+                    description: "高燃战斗场面 / 次世代视觉", 
+                    cover: "https://picsum.photos/id/104/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1jT411e7kE&page=1&high_quality=1",
+                    category: "游戏相关"
+                },
+                { 
+                    title: "科技馆互动展项导览", 
+                    description: "沉浸式科普 + 数字交互装置", 
+                    cover: "https://picsum.photos/id/20/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1Uy4y1C7kW&page=1&high_quality=1",
+                    category: "科技馆项目"
+                },
+                { 
+                    title: "城市品牌宣传片《脉动》", 
+                    description: "文旅影像诗篇 / 航拍延时", 
+                    cover: "https://picsum.photos/id/15/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1GJ411x7h7&page=1&high_quality=1",
+                    category: "宣传片"
+                },
+                { 
+                    title: "独立游戏《光遇》同人动画", 
+                    description: "风格化渲染 / 游戏情感叙事", 
+                    cover: "https://picsum.photos/id/169/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1GJ411x7h7&page=1&high_quality=1",
+                    category: "游戏相关"
+                },
+                { 
+                    title: "科技馆MR混合现实项目", 
+                    description: "未来展厅·混合现实技术落地", 
+                    cover: "https://picsum.photos/id/42/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1Uy4y1C7kW&page=1&high_quality=1",
+                    category: "科技馆项目"
+                },
+                { 
+                    title: "30秒创意短视频《节奏城市》", 
+                    description: "快节奏剪辑 / 视觉冲击", 
+                    cover: "https://picsum.photos/id/106/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1jT411e7kE&page=1&high_quality=1",
+                    category: "短视频"
+                },
+                { 
+                    title: "趣味科普短视频·量子纠缠", 
+                    description: "一分钟看懂量子力学", 
+                    cover: "https://picsum.photos/id/0/400/225", 
+                    embedUrl: "https://player.bilibili.com/player.html?bvid=BV1Uy4y1C7kW&page=1&high_quality=1",
+                    category: "短视频"
+                }
+            ],
+            // 联系方式纯文本 (无链接)
+            contacts: [
+                { icon: "fas fa-phone-alt", label: "手机 18501678482" },
+                { icon: "fab fa-weixin", label: "微信 xsx1213" },
+                { icon: "fab fa-qq", label: "QQ 121796010" }
+            ]
+        };
+
+        // 合并用户配置
+        let config = JSON.parse(JSON.stringify(defaultConfig));
+        if (typeof window.VIDEO_CONFIG !== 'undefined' && window.VIDEO_CONFIG) {
+            const userCfg = window.VIDEO_CONFIG;
+            if (userCfg.site) config.site = { ...config.site, ...userCfg.site };
+            if (userCfg.videos && Array.isArray(userCfg.videos) && userCfg.videos.length) config.videos = userCfg.videos;
+            if (userCfg.contacts && Array.isArray(userCfg.contacts)) config.contacts = userCfg.contacts;
+        }
+
+        // 站点文案
+        document.getElementById('siteTitle').innerText = config.site.title;
+        document.getElementById('siteSubtitle').innerText = config.site.subtitle;
+        document.getElementById('copyrightText').innerText = config.site.copyright;
+
+        // 渲染联系方式 (纯文本)
+        const contactsContainer = document.getElementById('staticContacts');
+        if (contactsContainer && config.contacts) {
+            let contactsHtml = '';
+            for (let c of config.contacts) {
+                const iconClass = c.icon && c.icon.trim() !== '' ? c.icon : 'fas fa-link';
+                const labelText = c.label || '联系方式';
+                contactsHtml += `
+                    <div class="contact-item-static">
+                        <i class="${iconClass}"></i>
+                        <span>${escapeHtml(labelText)}</span>
+                    </div>
+                `;
+            }
+            contactsContainer.innerHTML = contactsHtml;
+        } else if (contactsContainer) {
+            contactsContainer.innerHTML = `<div class="contact-item-static"><i class="fas fa-mobile-alt"></i><span>18501678482</span></div>
+                                            <div class="contact-item-static"><i class="fab fa-weixin"></i><span>xsx1213</span></div>
+                                            <div class="contact-item-static"><i class="fab fa-qq"></i><span>121796010</span></div>`;
+        }
+
+        // 视频数据与分组
+        let allVideos = config.videos.map(v => ({ ...v, category: v.category || "作品" }));
+        
+        // 定义分类显示顺序 (自定义顺序: 游戏相关, 科技馆项目, 宣传片, 短视频, 其他)
+        const categoryOrder = ["游戏相关", "科技馆项目", "宣传片", "短视频"];
+        // 分组: 按category分组
+        let groups = new Map();
+        allVideos.forEach(video => {
+            const cat = video.category;
+            if (!groups.has(cat)) groups.set(cat, []);
+            groups.get(cat).push(video);
+        });
+        // 排序分组: 优先按categoryOrder顺序，其余按字母序排在后面
+        let sortedCategories = Array.from(groups.keys()).sort((a, b) => {
+            let idxA = categoryOrder.indexOf(a);
+            let idxB = categoryOrder.indexOf(b);
+            if (idxA !== -1 && idxB !== -1) return idxA - idxB;
+            if (idxA !== -1) return -1;
+            if (idxB !== -1) return 1;
+            return a.localeCompare(b);
+        });
+
+        // 分组渲染容器
+        const groupedContainer = document.getElementById('groupedVideoContainer');
+        
+        // 渲染所有分组
+        function renderGroupedVideos() {
+            if (!groupedContainer) return;
+            if (allVideos.length === 0) {
+                groupedContainer.innerHTML = `<div class="empty-state"><i class="fas fa-video-slash" style="font-size: 2rem;"></i><p>暂无视频作品，请在 config.js 中配置 videos 数组 ✨</p></div>`;
+                return;
+            }
+
+            let html = '';
+            for (let cat of sortedCategories) {
+                const videoList = groups.get(cat);
+                if (!videoList || videoList.length === 0) continue;
+                // 分类图标
+                let iconClass = "fa-folder-open";
+                if (cat === "游戏相关") iconClass = "fa-gamepad";
+                else if (cat === "科技馆项目") iconClass = "fa-microchip";
+                else if (cat === "宣传片") iconClass = "fa-video";
+                else if (cat === "短视频") iconClass = "fa-mobile-alt";
+                
+                html += `<div class="category-group">
+                            <div class="section-title"><i class="fas ${iconClass}"></i> ${escapeHtml(cat)}</div>
+                            <div class="video-grid" data-category="${escapeHtml(cat)}">`;
+                // 生成卡片
+                videoList.forEach((video, idx) => {
+                    const coverUrl = video.cover && video.cover.trim() !== '' ? video.cover : 'https://picsum.photos/id/42/400/225';
+                    const titleEsc = escapeHtml(video.title || '未命名');
+                    const descEsc = escapeHtml(video.description || '点击观看完整作品');
+                    // 存储完整视频数据索引 (用自定义属性存储视频对象信息)
+                    html += `
+                        <div class="video-card" data-video-data='${JSON.stringify({ title: video.title, embedUrl: video.embedUrl, description: video.description })}'>
+                            <div class="card-cover">
+                                <img src="${coverUrl}" alt="${titleEsc}" loading="lazy">
+                                <div class="play-overlay">
+                                    <div class="play-icon-bg"><i class="fas fa-play"></i></div>
+                                </div>
+                            </div>
+                            <div class="card-info">
+                                <div class="card-title">${titleEsc}</div>
+                                <div class="card-desc">${descEsc}</div>
+                            </div>
+                        </div>
+                    `;
+                });
+                html += `</div></div>`;
+            }
+            groupedContainer.innerHTML = html;
+            
+            // 绑定所有卡片点击事件
+            const allCards = document.querySelectorAll('.video-card');
+            allCards.forEach(card => {
+                card.addEventListener('click', (e) => {
+                    const dataAttr = card.getAttribute('data-video-data');
+                    if (dataAttr) {
+                        try {
+                            const videoInfo = JSON.parse(dataAttr);
+                            openVideoModal(videoInfo);
+                        } catch(e) { console.warn(e); }
+                    } else {
+                        // 后备：尝试从子元素提取
+                        const titleEl = card.querySelector('.card-title');
+                        const title = titleEl ? titleEl.innerText : '视频作品';
+                        // 无法获取embedUrl，忽略
+                        console.warn('无视频数据');
+                    }
+                });
+            });
+        }
+
+        // 打开模态框 (自动播放 + 音量最大化处理)
+        function openVideoModal(video) {
+            if (!video || !video.embedUrl) return;
+            let embedSrc = video.embedUrl;
+            // 转换标准B站嵌入链接
+            if (embedSrc.includes('bilibili.com/video/') && !embedSrc.includes('player.bilibili.com')) {
+                const bvidMatch = embedSrc.match(/BV([a-zA-Z0-9]+)/);
+                if (bvidMatch) {
+                    embedSrc = `https://player.bilibili.com/player.html?bvid=${bvidMatch[0]}&page=1&high_quality=1`;
+                }
+            }
+            // 构建最终URL: 强制 autoplay=1, 确保非静音 (muted=0), 增加 volume=100 尝试最大化音量(部分支持)
+            let finalUrl = embedSrc;
+            if (finalUrl.includes('player.bilibili.com')) {
+                try {
+                    const urlObj = new URL(finalUrl);
+                    urlObj.searchParams.set('autoplay', '1');
+                    urlObj.searchParams.set('muted', '0');
+                    urlObj.searchParams.set('high_quality', '1');
+                    // 添加音量参数 (非官方但部分播放器识别)
+                    urlObj.searchParams.set('volume', '100');
+                    finalUrl = urlObj.toString();
+                } catch(e) {
+                    finalUrl = embedSrc + (embedSrc.includes('?') ? '&' : '?') + 'autoplay=1&muted=0&volume=100';
+                }
+            } else {
+                finalUrl += (finalUrl.includes('?') ? '&' : '?') + 'autoplay=1&muted=0&volume=100';
+            }
+            
+            const modal = document.getElementById('videoModal');
+            const modalIframe = document.getElementById('modalIframe');
+            const modalTitleSpan = document.getElementById('modalVideoTitle');
+            if (modalIframe) {
+                modalIframe.src = finalUrl;
+            }
+            if (modalTitleSpan) {
+                modalTitleSpan.innerText = video.title || 'B站精选作品';
+            }
+            if (modal) {
+                modal.classList.add('show');
+            }
+        }
+
+        // 关闭模态框
+        const modalElem = document.getElementById('videoModal');
+        const closeBtn = document.getElementById('closeModalBtn');
+        function closeModal() {
+            if (modalElem) {
+                modalElem.classList.remove('show');
+                const iframe = document.getElementById('modalIframe');
+                if (iframe) iframe.src = '';
+            }
+        }
+        if (closeBtn) closeBtn.addEventListener('click', closeModal);
+        if (modalElem) {
+            modalElem.addEventListener('click', (e) => {
+                if (e.target === modalElem) closeModal();
+            });
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modalElem.classList.contains('show')) closeModal();
+            });
+        }
+
+        // 辅助转义
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/[&<>]/g, function(m) {
+                if (m === '&') return '&amp;';
+                if (m === '<') return '&lt;';
+                if (m === '>') return '&gt;';
+                return m;
+            });
+        }
+
+        // 启动渲染
+        renderGroupedVideos();
+    })();
+</script>
+</body>
+</html>
